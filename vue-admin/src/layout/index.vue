@@ -141,8 +141,16 @@
     width: 433px;
 }
 .menu span {
-    color: rgb(191, 203, 217);
+    color: rgb(191, 203, 217) !important;
     margin-left: 15px;
+    text-decoration: none !important;
+}
+a {
+  text-decoration: none;
+}
+ 
+.router-link-active {
+  text-decoration: none;
 }
 .right {
     width: 85%;
