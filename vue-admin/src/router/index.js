@@ -21,23 +21,58 @@ const routes = [
       leaf: true, // 只有一个节点
       children: [
         {
-          path: "/user-management",
+          path: "/system/user",
           name: "用户管理",
-          component: () => import("../views/components/user-management.vue"),
+          component: () => import("../views/system/user/index.vue"),
           hidden: true
         },
         {
-          path: "/role-management",
-          name: "问题",
-          component: () => import("../views/components/role-management.vue"),
+          path: "/system/role",
+          name: "角色管理",
+          component: () => import("../views/system/role/index.vue"),
           hidden: true
-      }
+        },
+        {
+          path: "/system/menu",
+          name: "菜单管理",
+          component: () => import("../views/system/menu/index.vue"),
+          hidden: true
+        },
+        {
+          path: "/system/dept",
+          name: "部门管理",
+          component: () => import("../views/system/dept/index.vue"),
+          hidden: true
+        },
+        {
+          path: "/system/job",
+          name: "岗位管理",
+          component: () => import("../views/system/job/index.vue"),
+          hidden: true
+        },
+        {
+          path: "/system/dict",
+          name: "字典管理",
+          component: () => import("../views/system/dict/index.vue"),
+          hidden: true
+        },
+        {
+          path: "/system/timing",
+          name: "任务调度",
+          component: () => import("../views/system/timing/index.vue"),
+          hidden: true
+        }
     ]
   }
 ];
 
-const router = new VueRouter({
-  routes
-});
+// const router = new VueRouter({
+//   routes
+// });
 
-export default router;
+// export default router;
+export default new VueRouter({
+  // mode: 'hash',
+  mode: 'history',
+  routes
+})

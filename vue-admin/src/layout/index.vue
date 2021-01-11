@@ -15,20 +15,19 @@
                         background-color="#304156"
                         text-color="#fff"
                         active-text-color="#ffd04b">
-                        <el-submenu index="1" class="menuitem">
+                        <el-submenu index="1">
                             <template slot="title">
                                 <i class="el-icon-s-tools"></i>
                                 <span class="menuspan">系统管理</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index='/user-management'><i class="el-icon-s-tools"></i><span>用户管理</span></el-menu-item>
-                                <el-menu-item index='/role-management'><i class="el-icon-s-tools"></i><span>角色管理</span></el-menu-item>
-                                <el-menu-item index="/menu-management"><i class="el-icon-s-tools"></i><span>菜单管理</span></el-menu-item>
-                                <el-menu-item index="/department-management"><i class="el-icon-s-tools"></i><span>部门管理</span></el-menu-item>
-                                <el-menu-item index="/post-management"><i class="el-icon-s-tools"></i><span>岗位管理</span></el-menu-item>
-                                <el-menu-item index="/dictionary-management"><i class="el-icon-s-tools"></i><span>字典管理</span></el-menu-item>
-                                <el-menu-item index="/task-scheduling"><i class="el-icon-s-tools"></i><span>任务调度</span></el-menu-item>
-                                <el-menu-item index="/spare"><i class="el-icon-s-tools"></i><span>备用</span></el-menu-item>
+                                <el-menu-item index='/system/user'><i class="el-icon-user-solid"></i><span>用户管理</span></el-menu-item>
+                                <el-menu-item index='/system/role'><i class="el-icon-eleme"></i><span>角色管理</span></el-menu-item>
+                                <el-menu-item index="/system/menu"><i class="el-icon-s-operation"></i><span>菜单管理</span></el-menu-item>
+                                <el-menu-item index="/system/dept"><i class="el-icon-truck"></i><span>部门管理</span></el-menu-item>
+                                <el-menu-item index="/system/job"><i class="el-icon-ship"></i><span>岗位管理</span></el-menu-item>
+                                <el-menu-item index="/system/dict"><i class="el-icon-notebook-1"></i><span>字典管理</span></el-menu-item>
+                                <el-menu-item index="/system/timing"><i class="el-icon-odometer"></i><span>任务调度</span></el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="2">
@@ -126,15 +125,6 @@
             },
         }
     },
-    created() {
-        //根据路由设置导航栏高亮
-        //    this.element.active=this.$route.matched[1].path
-        this.element.active = this.$route.fullPath;
-        alert(this.element.active);
-        // console.log(this.$route.fullPath);
-        //      alert(this.element.active)
-        this.$router.push("/dashboard");
-    },
     methods: {
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
@@ -203,6 +193,11 @@ a {
 
 .el-menu-item {
     padding-left: 60px !important;
+}
+</style>
+<style>
+.el-menu-item-group__title {
+    padding: 0px !important;
 }
 
 </style>
