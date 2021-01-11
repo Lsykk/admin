@@ -2,12 +2,13 @@
     <div>
         <div class="left">
             <div class="logo">
-                <h2>后台管理系统</h2>
+                <h2>嘉悦后台管理系统</h2>
             </div>
             <div class="menu">
                 <el-col :span="12">
                     <el-menu
                         default-active="2"
+                        :router="element.router"
                         class="el-menu-vertical-demo"
                         @open="handleOpen"
                         @close="handleClose"
@@ -20,14 +21,14 @@
                                 <span class="menuspan">系统管理</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1"><i class="el-icon-s-tools"></i><router-link to="/user"><span>用户管理</span></router-link></el-menu-item>
-                                <el-menu-item index="1-2"><i class="el-icon-s-tools"></i><span>角色管理</span></el-menu-item>
-                                <el-menu-item index="1-3"><i class="el-icon-s-tools"></i><span>菜单管理</span></el-menu-item>
-                                <el-menu-item index="1-4"><i class="el-icon-s-tools"></i><span>部门管理</span></el-menu-item>
-                                <el-menu-item index="1-5"><i class="el-icon-s-tools"></i><span>岗位管理</span></el-menu-item>
-                                <el-menu-item index="1-6"><i class="el-icon-s-tools"></i><span>字典管理</span></el-menu-item>
-                                <el-menu-item index="1-7"><i class="el-icon-s-tools"></i><span>任务调度</span></el-menu-item>
-                                <el-menu-item index="1-8"><i class="el-icon-s-tools"></i><span>备用</span></el-menu-item>
+                                <el-menu-item index='/user-management'><i class="el-icon-s-tools"></i><span>用户管理</span></el-menu-item>
+                                <el-menu-item index='/role-management'><i class="el-icon-s-tools"></i><span>角色管理</span></el-menu-item>
+                                <el-menu-item index="/menu-management"><i class="el-icon-s-tools"></i><span>菜单管理</span></el-menu-item>
+                                <el-menu-item index="/department-management"><i class="el-icon-s-tools"></i><span>部门管理</span></el-menu-item>
+                                <el-menu-item index="/post-management"><i class="el-icon-s-tools"></i><span>岗位管理</span></el-menu-item>
+                                <el-menu-item index="/dictionary-management"><i class="el-icon-s-tools"></i><span>字典管理</span></el-menu-item>
+                                <el-menu-item index="/task-scheduling"><i class="el-icon-s-tools"></i><span>任务调度</span></el-menu-item>
+                                <el-menu-item index="/spare"><i class="el-icon-s-tools"></i><span>备用</span></el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="2">
@@ -101,11 +102,39 @@
         </div>
         <div class="right">
             <div class="fixed-header"></div>
+            <div>
+                <router-view></router-view>
+            </div>
         </div>
     </div>
 </template>
 <script>
   export default {
+    data() {
+        return {
+            date: "",
+            time: "",
+            //   logo: require(''),
+            element: {
+                //是否只保持一个子菜单的展开
+                opened: true,
+                //是否使用 vue-router 的模式
+                //启用该模式会在激活导航时以 index 作为 path 进行路由跳转
+                router: true,
+                //当前激活菜单的 index
+                // active: "/problem"
+            },
+        }
+    },
+    created() {
+        //根据路由设置导航栏高亮
+        //    this.element.active=this.$route.matched[1].path
+        this.element.active = this.$route.fullPath;
+        alert(this.element.active);
+        // console.log(this.$route.fullPath);
+        //      alert(this.element.active)
+        this.$router.push("/dashboard");
+    },
     methods: {
       handleOpen(key, keyPath) {
         console.log(key, keyPath);

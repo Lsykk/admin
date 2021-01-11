@@ -4,8 +4,16 @@
             <h3 class="title">
                 嘉悦后台管理系统
             </h3>
+            <div class="text">
+                <el-input v-model="input1" placeholder="请输入账号" style="
+    margin-bottom: 20px;
+"></el-input>
+                <el-input placeholder="请输入密码" v-model="input2" show-password style="
+    margin-bottom: 20px;
+"></el-input>
+            </div>
             <el-form-item style="width:100%;">
-                <el-button size="medium" type="primary" style="width:100%;" @click="Login">
+                <el-button size="medium" type="primary" style="width:100%; margin-bottom: 20px" @click="Login">
                     <span>登 录</span>
                 </el-button>
             </el-form-item>
@@ -18,6 +26,8 @@ export default {
     name: 'Login',
     data() {
         return {
+            input1: '',
+            input2:'',
             Background: Background,
             loading: false,
         }

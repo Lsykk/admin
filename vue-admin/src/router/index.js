@@ -15,15 +15,25 @@ const routes = [
     component: () => import("../views/Login/index.vue")
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Layout
-  },
-  {
-    path: '/user',
-    name: 'User',
-    component: () => import("../views/components/users.vue")
-  },
+    path: "/dashboard",
+      name: "Dashboard",
+      component: Layout,
+      leaf: true, // 只有一个节点
+      children: [
+        {
+          path: "/user-management",
+          name: "用户管理",
+          component: () => import("../views/components/user-management.vue"),
+          hidden: true
+        },
+        {
+          path: "/role-management",
+          name: "问题",
+          component: () => import("../views/components/role-management.vue"),
+          hidden: true
+      }
+    ]
+  }
 ];
 
 const router = new VueRouter({
