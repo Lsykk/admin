@@ -26,15 +26,14 @@
                     clearable
                     size="small"
                     placeholder="输入名称或者邮箱搜索"
-                    style="width: 200px; display: block; float: left;margin: 20px 5px;"
-                    class="filter-text"
+                    class="filter-user"
                     v-model="query.blurry">
                 </el-input>
-                <div class="block" style="float: left;margin: 20px 5px;">
+                <div>
                     <el-date-picker
                     v-model="query.createTime"
                     type="datetimerange"
-                    class="filter-text"
+                    class="filter-date"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     :default-time="['12:00:00']">
@@ -45,8 +44,7 @@
                     clearable
                     size="small"
                     placeholder="状态"
-                    class="filter-text"
-                    style="width: 90px;margin: 20px 5px;"
+                    class="filter-status"
                     >
                     <el-option
                         v-for="item in enabledTypeOptions"
@@ -61,7 +59,7 @@
                 </div>
             </div>
             <div class="user-op">
-                <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus">新增</el-button>
+                <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus" @click="adduser">新增</el-button>
                 <el-button type="success" disabled class="user-op-button" icon="el-icon-edit">修改</el-button>
                 <el-button type="danger" disabled class="user-op-button" icon="el-icon-delete">删除</el-button>
                 <el-button type="warning" class="user-op-button" icon="el-icon-download">导出</el-button>
@@ -73,46 +71,22 @@
                     tooltip-effect="dark"
                     class="user-table"
                     @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column prop="user_name" label="用户名" width="120"></el-table-column>
+                    <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
+                    <el-table-column prop="department" label="部门" width="120"></el-table-column>
+                    <el-table-column prop="create_data" label="创建日期" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="update_data" label="修改日期" width="120"></el-table-column>
+                    <el-table-column prop="status" label="状态" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="phone_number" label="手机号码" width="120"></el-table-column>
                     <el-table-column
-                    type="selection"
-                    width="55">
+                        v-if="true"
+                        label="操作"
+                        width="115"
+                        align="center"
+                        fixed="right"
+                    >
                     </el-table-column>
-                    <el-table-column
-                    prop="user_name"
-                    label="用户名"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    prop="nickname"
-                    label="昵称"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    prop="department"
-                    label="部门"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    prop="create_data"
-                    label="创建日期"
-                    show-overflow-tooltip>
-                    </el-table-column>
-                    <el-table-column
-                    prop="update_data"
-                    label="修改日期"
-                    width="120">
-                    </el-table-column>
-                    <el-table-column
-                    prop="status"
-                    label="状态"
-                    show-overflow-tooltip>
-                    </el-table-column>
-                    <el-table-column
-                    prop="phone_number"
-                    label="手机号码"
-                    width="120">
-                    </el-table-column>
-
                 </el-table>
             </div>
         </div>
@@ -163,6 +137,11 @@ export default {
             defaultProps: {
             children: 'children',
             label: 'label'
+            },
+            permission: {
+                add: ['admin', 'user:add'],
+                edit: ['admin', 'user:edit'],
+                del: ['admin', 'user:del']
             },
             enabledTypeOptions: [
                 { key: 'true', display_name: '激活' },
@@ -256,26 +235,26 @@ export default {
         handleSelectionChange(val) {
         this.multipleSelection = val;
         },
+        adduser() {
+            this.$prompt('请输入邮箱', '新增用户', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+            inputErrorMessage: '邮箱格式不正确'
+            }).then(({ value }) => {
+            this.$message({
+                type: 'success',
+                message: '你的邮箱是: ' + value
+            });
+            }).catch(() => {
+            this.$message({
+                type: 'info',
+                message: '取消输入'
+            });       
+            });
+        },
         // 获取左侧部门数据
         getDeptDatas(node, resolve) {
-            // const sort = 'id,desc'
-            // const params = { sort: sort }
-            // if (typeof node !== 'object') {
-            //     if (node) {
-            //     params['name'] = node
-            //     }
-            // } else if (node.level !== 0) {
-            //     params['pid'] = node.data.id
-            // }
-            // setTimeout(() => {
-            //     getDepts(params).then(res => {
-            //     if (resolve) {
-            //         resolve(res.content)
-            //     } else {
-            //         this.deptDatas = res.content
-            //     }
-            //     })
-            // }, 100)
         }
     }
 }
@@ -296,7 +275,7 @@ export default {
 }
 .head-container {
     height: 50px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     // background-color: #666;
 }
 .filter-text {
@@ -311,6 +290,51 @@ export default {
       line-height: 30.5px;
     }
 }
+.filter-user {
+    font-size: small;
+    height: 33px;
+    width: 200px;
+    margin: 0 3px 10px 0;
+    width: 200px; 
+    display: block; 
+    float: left;
+    margin: 20px 5px;
+    input {
+      height: 30.5px;
+      line-height: 30.5px;
+    }
+}
+
+.filter-date {
+    font-size: small;
+    display: block;
+    height: 33px;
+    width: 200px;
+    float: left;
+    margin: 20px 5px;
+    input {
+      height: 30.5px;
+      line-height: 30.5px;
+    }
+}
+
+.filter-status {
+    font-size: small;
+    display: inline-block;
+    height: 33px;
+    width: 80px;
+    margin: 20px 5px;
+    vertical-align: middle;
+    input {
+      height: 30.5px;
+      line-height: 30.5px;
+    }
+}
+.el-select-dropdown__item{
+    font-size: 14px ;
+    line-height: 34px ;
+    text-align: center !important;
+ }
 .right-button {
     font-size: 12px;
     color: #fff;
