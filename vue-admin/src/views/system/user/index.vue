@@ -55,15 +55,15 @@
                         :value="item.key"
                     />
                 </el-select>
-                <div style="float: right;margin: 20px 0px;margin-right: 250px;">
-                    <el-button type="success" class="right-button" icon="el-icon-search">搜索</el-button>
-                    <el-button type="warning" class="right-button" icon="el-icon-refresh-left">重置</el-button>
+                <div style="float: right;margin: 20px 0px;margin-right: 250px;margin-right: 650px;">
+                    <el-button type="success" class="user-op-button" icon="el-icon-search">搜索</el-button>
+                    <el-button type="warning" class="user-op-button" icon="el-icon-refresh-left">重置</el-button>
                 </div>
             </div>
             <div class="user-op">
                 <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus">新增</el-button>
-                <el-button type="success" disabled="modify" class="user-op-button" icon="el-icon-edit">修改</el-button>
-                <el-button type="danger" disabled="delete" class="user-op-button" icon="el-icon-delete">删除</el-button>
+                <el-button type="success" disabled class="user-op-button" icon="el-icon-edit">修改</el-button>
+                <el-button type="danger" disabled class="user-op-button" icon="el-icon-delete">删除</el-button>
                 <el-button type="warning" class="user-op-button" icon="el-icon-download">导出</el-button>
             </div>
             <div>

@@ -100,7 +100,18 @@
             </div>
         </div>
         <div class="right">
-            <div class="fixed-header"></div>
+            <div class="fixed-header">
+                <div class="catalog-icon">
+                    <i class="el-icon-s-fold "></i>
+                </div>
+                <div class="breadcrumb">
+                    <el-breadcrumb separator-class="el-icon-arrow-right" >
+                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+                        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+                    </el-breadcrumb>
+                </div>
+            </div>
             <div>
                 <router-view></router-view>
             </div>
@@ -172,28 +183,41 @@ a {
   text-decoration: none;
 }
 .right {
-    width: 89%;
+    width: 85%;
     height: 100vh;
     background-color: white;
     float: right;
 }
 .fixed-header {
-    /* position: fixed; */
-    top: 0;
-    right: 0;
-    z-index: 9;
-    /* width: calc(100% - 205px); */
     height: 60px;
     -webkit-transition: width .28s;
     transition: width .28s;
     padding: 0;
-    /* background-color: yellow; */
     box-shadow: 0 0.5px 5px #D7D7D7;
 }
 
 .el-menu-item {
     padding-left: 60px !important;
 }
+.catalog-icon {
+    width: 30px;
+    height: 30px;
+    float: left;
+    /* background-color: red; */
+    /* margin: 10px 10px; */
+}
+.catalog-icon i {
+    margin-top: 16px;
+    margin-left: 20px;
+    font-size: 25px;
+}
+.breadcrumb {
+    width: 500px;
+    /* background-color: red; */
+    padding-top: 22px;
+    padding-left: 60px;
+}
+
 </style>
 <style>
 .el-menu-item-group__title {
