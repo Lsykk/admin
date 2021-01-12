@@ -137,7 +137,7 @@
 </script>
 <style scoped>
 .left {
-    width: 15%;
+    width: 205px !important;
     height: 100vh;
     background-color: #304156;
     float: left;
@@ -157,7 +157,7 @@
     vertical-align: middle;
 }
 .menu {
-    width: 433px;
+    width: 411px;
 }
 .menu span {
     color: rgb(191, 203, 217) !important;
@@ -172,7 +172,7 @@ a {
   text-decoration: none;
 }
 .right {
-    width: 85%;
+    width: 89%;
     height: 100vh;
     background-color: white;
     float: right;
