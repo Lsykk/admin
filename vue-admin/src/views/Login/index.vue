@@ -6,7 +6,7 @@
             </h3>
             <div>
                 <el-input placeholder="请输入内容" prefix-icon="el-icon-user-solid" v-model="input1" style="margin-bottom: 20px;"></el-input>
-                <el-input placeholder="请输入内容" prefix-icon="el-icon-s-goods" v-model="input2" style="margin-bottom: 20px;"></el-input>
+                <el-input placeholder="请输入内容" prefix-icon="el-icon-s-goods" v-model="input2" show-password style="margin-bottom: 20px;"></el-input>
             </div>
             <el-form-item style="width:100%;">
                 <el-button size="medium" type="primary" style="width:100%; margin-bottom: 20px" @click="Login">
@@ -41,13 +41,16 @@ export default {
             // this.$router.push({ path:'/dashboard.vue'})
             if ( this.input1 == "admin" && this.input2 == "123456"){
                 this.$message({
-                message: '登录成功',
+                message: '登录成功！',
                 type: 'success'
                 });
                 this.$router.push({ path: '/Dashboard' })
             }
+            else if ( this.input1 == "" || this.input2 == "") {
+                this.$message.error('账号或密码不能为空！');
+            }
             else{
-                this.$message.error('密码错误，请重新输入');
+                this.$message.error('密码错误，请重新输入！');
                 this.input1 = '',
                 this.input2 = ''
             }

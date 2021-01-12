@@ -55,7 +55,7 @@
                         :value="item.key"
                     />
                 </el-select>
-                <div style="float: right;margin: 20px 0px;margin-right: 250px;margin-right: 650px;">
+                <div style="float: right;margin-right: 600px;margin-top: 20px;">
                     <el-button type="success" class="user-op-button" icon="el-icon-search">搜索</el-button>
                     <el-button type="warning" class="user-op-button" icon="el-icon-refresh-left">重置</el-button>
                 </div>
