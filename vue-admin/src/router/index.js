@@ -16,10 +16,21 @@ const routes = [
   },
   {
     path: "/dashboard",
-      name: "Dashboard",
-      component: Layout,
-      leaf: true, // 只有一个节点
-      children: [
+    name: "",//首页
+    component: Layout,
+    children: [
+      {
+          path: "/",
+          name: "",
+          component: () => import("../views/home.vue"),     
+      }
+    ]
+  },
+  {
+    path: "/system",
+    name: "系统管理",
+    component: Layout,
+    children: [
         {
           path: "/system/user",
           name: "用户管理",
@@ -61,9 +72,25 @@ const routes = [
           name: "任务调度",
           component: () => import("../views/system/timing/index.vue"),
           hidden: true
-        }
-    ]
-  }
+        }]
+  },
+{
+  path: "/monitor",
+  name: "系统监控",
+  component: Layout,
+  children: [
+    {
+        path: "/monitor/online",
+        name: "在线用户",
+        component: () => import("../views/monitor/online/index.vue"),     
+    },
+    {
+      path: "/monitor/log",
+      name: "操作日志",
+      component: () => import("../views/monitor/log/index.vue"),     
+    }
+  ]
+}
 ];
 
 // const router = new VueRouter({

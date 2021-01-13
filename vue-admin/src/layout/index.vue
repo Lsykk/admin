@@ -2,7 +2,7 @@
     <div>
         <div class="left">
             <div class="logo">
-                <h2>嘉悦后台管理系统</h2>
+                <h2>后台管理系统</h2>
             </div>
             <div class="menu">
                 <el-col :span="12">
@@ -36,8 +36,8 @@
                                 <span slot="title" class="menuspan">系统监控</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="2-1"><i class="el-icon-s-tools"></i><span>在线用户</span></el-menu-item>
-                                <el-menu-item index="2-2"><i class="el-icon-s-tools"></i><span>操作日志</span></el-menu-item>
+                                <el-menu-item index="/monitor/online"><i class="el-icon-s-tools"></i><span>在线用户</span></el-menu-item>
+                                <el-menu-item index="/monitor/log"><i class="el-icon-s-tools"></i><span>操作日志</span></el-menu-item>
                                 <el-menu-item index="2-3"><i class="el-icon-s-tools"></i><span>异常日志</span></el-menu-item>
                                 <el-menu-item index="2-4"><i class="el-icon-s-tools"></i><span>服务监控</span></el-menu-item>
                                 <el-menu-item index="2-5"><i class="el-icon-s-tools"></i><span>备用</span></el-menu-item>
@@ -105,10 +105,22 @@
                     <i class="el-icon-s-fold "></i>
                 </div>
                 <div class="breadcrumb">
-                    <el-breadcrumb separator-class="el-icon-arrow-right" >
+                    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" >
                         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                         <el-breadcrumb-item>系统管理</el-breadcrumb-item>
                         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+                    </el-breadcrumb> -->
+                      <!-- <el-breadcrumb class="app-breadcrumb" separator="/">
+                        <transition-group name="breadcrumb">
+                        <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
+                            <span v-if="item.redirect==='noredirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
+                            <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+                        </el-breadcrumb-item>
+                        </transition-group>
+                    </el-breadcrumb> -->
+                    <el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to="item.path">{{item.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
             </div>
@@ -124,6 +136,7 @@
         return {
             date: "",
             time: "",
+            levelList: [],
             //   logo: require(''),
             element: {
                 //是否只保持一个子菜单的展开
@@ -136,7 +149,23 @@
             },
         }
     },
+    watch: {
+        $route() {
+            this.getBreadcrumb()
+        }
+    },
+    created() {
+        this.getBreadcrumb()
+    },
     methods: {
+      getBreadcrumb() {
+        let matched = this.$route.matched.filter(item => item.name)
+                // const first = matched[0];
+                // if (first && first.name.trim().toLocaleLowerCase() !== 'Dashboard'.toLocaleLowerCase()) {
+                //     // matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
+                // }
+                this.levelList = matched
+      },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
