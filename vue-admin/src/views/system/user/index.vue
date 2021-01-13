@@ -12,7 +12,7 @@
                 </el-input>
                 <el-tree
                 class="filter-tree"
-                :data="data"
+                :data="deptDatas"
                 :props="defaultProps"
                 default-expand-all
                 :filter-node-method="filterNode"
@@ -59,9 +59,9 @@
                 </div>
             </div>
             <div class="user-op">
-                <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus" @click="adduser">新增</el-button>
-                <el-button type="success" disabled class="user-op-button" icon="el-icon-edit">修改</el-button>
-                <el-button type="danger" disabled class="user-op-button" icon="el-icon-delete">删除</el-button>
+                <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus" @click="adduserClick()">新增</el-button>
+                <el-button id="modify_bt" type="success" v-bind:disabled="modify_bt" class="user-op-button" icon="el-icon-edit">修改</el-button>
+                <el-button id="delete_bt" type="danger" v-bind:disabled="delete_bt" class="user-op-button" icon="el-icon-delete">删除</el-button>
                 <el-button type="warning" class="user-op-button" icon="el-icon-download">导出</el-button>
             </div>
             <div>
@@ -89,17 +89,93 @@
                     </el-table-column>
                 </el-table>
             </div>
+             <el-dialog title="新增账号" :visible.sync="dialogVisible">
+                <el-form :model="form"  :rules="rules" ref="form" label-width="66px">
+                    <el-form-item label="用户名" prop="username" class="dialogform">
+                    <el-input v-model="form.username" />
+                    </el-form-item>
+                    <el-form-item label="电话" prop="phone" class="dialogform">
+                    <el-input v-model.number="form.phone" />
+                    </el-form-item>
+                    <el-form-item label="昵称" prop="nickName" class="dialogform">
+                    <el-input v-model="form.nickName" />
+                    </el-form-item>
+                    <el-form-item label="邮箱" prop="email" class="dialogform">
+                    <el-input v-model="form.email" />
+                    </el-form-item>
+                    <el-form-item label="部门" prop="dept.id" class="dialogform">
+                        <el-select v-model="form.dept.id" clearable placeholder="请选择部门" style="width: 185px">
+                            <el-option v-for=" item in depts" :label="item.label" :value="item.value" :key="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="岗位" prop="jobs.id" class="dialogform">
+                        <el-select v-model="form.job"  multiple placeholder="请选择岗位" style="width: 185px"> 
+                            <el-option v-for=" item in jobs" :label="item.label" :value="item.value" :key="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="性别" class="dialogform"> 
+                        <el-radio-group v-model="form.gender" style="width: 178px;text-align: center;">
+                            <el-radio label="男">男</el-radio>
+                            <el-radio label="女">女</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="状态" class="dialogform">
+                        <el-radio v-model="radio" label="1">激活</el-radio>
+                        <el-radio v-model="radio" label="2">禁用</el-radio>
+                    </el-form-item>
+                    <el-form-item label="角色" prop="roles.id" class="dialogform">
+                        <el-select v-model="form.role" style="width: 450px" multiple placeholder="请选择">
+                            <el-option v-for=" item in roles" :label="item.label" :value="item.value" :key="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
 <script>
+import { isvalidPhone } from "@/utils/validate";
 export default {
     data(){
+        // 自定义验证
+        const validPhone = (rule, value, callback) => {
+        if (!value) {
+            callback(new Error("请输入电话号码"));
+        } else if (!isvalidPhone(value)) {
+            callback(new Error("请输入正确的11位手机号码"));
+        } else {
+            callback();
+        }
+        };
         return {
-            modify: true,
-            delete: true,
+            dialogVisible: false,
+            form_dept_value:null,
+            modify_bt: true,
+            delete_bt: true,
             deptName: '',
-            data: [{
+            depts: [
+                { value: '1', label: '信息部'},
+                { value: '2', label: '人事部'},
+                { value: '3', label: '财务部'},
+                { value: '4', label: '业务部'},
+                { value: '5', label: '综合部'}
+            ],
+            jobs: [
+                { value: '1', label: '经理'},
+                { value: '2', label: '主管'},
+                { value: '3', label: '副主管'},
+                { value: '4', label: '普通员工'},
+                { value: '5', label: '实习生'}                
+            ],
+            roles: [
+                { value: '1', label: 'admin'},
+                { value: '2', label: '普通用户'},   
+            ],
+            deptDatas: [{
             id: 1,
             label: '华东地区',
             children: [{
@@ -147,6 +223,31 @@ export default {
                 { key: 'true', display_name: '激活' },
                 { key: 'false', display_name: '锁定' }
             ],
+            rules: {
+                username: [
+                { required: true, message: "请输入用户名", trigger: "blur" },
+                {
+                    min: 2,
+                    max: 20,
+                    message: "长度在 2 到 20 个字符",
+                    trigger: "blur",
+                },
+                ],
+                nickName: [
+                { required: true, message: "请输入用户昵称", trigger: "blur" },
+                {
+                    min: 2,
+                    max: 20,
+                    message: "长度在 2 到 20 个字符",
+                    trigger: "blur",
+                },
+                ],
+                email: [
+                { required: true, message: "请输入邮箱地址", trigger: "blur" },
+                { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" },
+                ],
+                phone: [{ required: true, trigger: "blur", validator: validPhone }],
+            },
             query: {
                 blurry: '',
                 createTime: '',
@@ -219,7 +320,20 @@ export default {
                 phone_number: '18768263972'
                 }
             ],
-            multipleSelection: []
+            multipleSelection: [],
+            form : {
+                id: null,
+                username: null,
+                nickName: null,
+                gender: "男",
+                email: null,
+                enabled: "false",
+                roles: [],
+                jobs: [],
+                dept: { id: null },
+                phone: null,
+            },
+            radio: '1',
         }
     },
     watch: {
@@ -228,33 +342,65 @@ export default {
       }
     },
     methods: {
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+            .then(_ => {
+                done();
+            })
+            .catch(_ => {});
+        },
         filterNode(value, data) {
         if (!value) return true;
         return data.label.indexOf(value) !== -1;
         },
-        handleSelectionChange(val) {
-        this.multipleSelection = val;
-        },
-        adduser() {
-            this.$prompt('请输入邮箱', '新增用户', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-            inputErrorMessage: '邮箱格式不正确'
-            }).then(({ value }) => {
-            this.$message({
-                type: 'success',
-                message: '你的邮箱是: ' + value
-            });
-            }).catch(() => {
-            this.$message({
-                type: 'info',
-                message: '取消输入'
-            });       
-            });
+        adduserClick() {
+            // alert('add');
+            this.dialogVisible = true;
         },
         // 获取左侧部门数据
         getDeptDatas(node, resolve) {
+        },
+        // //监听row-click事件，实现选中
+        // rowClick(val) {
+        //     console.log(val);
+        //     this.modify_bt = false ;
+        //     this.delete_bt = false ;
+        //     //  let refsElTable = this.$refs.serveTable; // 获取表格对象
+        //     //  let findRow = this.multipleSelection.find(c => c.rowIndex == row.rowIndex);  //找到选中的行
+        //     //  if (findRow ) {
+        //     //      refsElTable.toggleRowSelection(row, false);  //如过重复选中，则取消选中
+        //     //      return;
+        //     //  }
+        //     //  refsElTable.toggleRowSelection(row,true); // 实现选中行中选中事件
+        //  },
+        //表格选中事件
+            // 获取弹窗内部门数据
+        loadDepts() {
+            // if (action === LOAD_CHILDREN_OPTIONS) {
+            //     getDepts({ enabled: true, pid: parentNode.id }).then((res) => {
+            //     parentNode.children = res.content.map(function (obj) {
+            //         if (obj.hasChildren) {
+            //         obj.children = null;
+            //         }
+            //         return obj;
+            //     });
+            //     setTimeout(() => {
+            //         callback();
+            //     }, 200);
+            //     });
+            // }
+        },
+      handleSelectionChange(selection) {
+            // this.multipleSelection = selection;
+            console.log(selection.length);
+            if (selection.length == 0){
+                this.modify_bt = true ;
+                this.delete_bt = true ;
+            }
+            else {
+                this.modify_bt = false ;
+                this.delete_bt = false ;
+            }
         }
     }
 }
@@ -360,6 +506,16 @@ export default {
     font-size: 12px;
     border-radius: 3px;
 }
+.dialogform{
+    margin-bottom: 18px;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
+}
 
 </style>
 <style>
+.el-dialog {
+    width: 30%;
+}
+</style>

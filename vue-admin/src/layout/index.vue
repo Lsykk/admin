@@ -2,7 +2,7 @@
     <div>
         <div class="left">
             <div class="logo">
-                <h2>后台管理系统</h2>
+                <h2>嘉悦后台管理系统</h2>
             </div>
             <div class="menu">
                 <el-col :span="12">
@@ -105,19 +105,6 @@
                     <i class="el-icon-s-fold "></i>
                 </div>
                 <div class="breadcrumb">
-                    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" >
-                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-                        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-                    </el-breadcrumb> -->
-                      <!-- <el-breadcrumb class="app-breadcrumb" separator="/">
-                        <transition-group name="breadcrumb">
-                        <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
-                            <span v-if="item.redirect==='noredirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
-                            <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
-                        </el-breadcrumb-item>
-                        </transition-group>
-                    </el-breadcrumb> -->
                     <el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
                         <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to="item.path">{{item.name}}</el-breadcrumb-item>
