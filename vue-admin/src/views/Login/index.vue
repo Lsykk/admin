@@ -1,12 +1,10 @@
 <template>
     <div id="login" class="login" :style="'background-image:url('+ Background +');'">
         <el-form class="login_form">
-            <h3 class="title">
-                嘉悦后台管理系统
-            </h3>
+            <h3 class="title">嘉悦后台管理系统</h3>
             <div>
-                <el-input placeholder="请输入内容" prefix-icon="el-icon-user-solid" v-model="input1" style="margin-bottom: 20px;"></el-input>
-                <el-input placeholder="请输入内容" prefix-icon="el-icon-s-goods" v-model="input2" show-password style="margin-bottom: 20px;"></el-input>
+                <el-input placeholder="请输入内容" prefix-icon="el-icon-user-solid" v-model="loginruleForm.loginname" style="margin-bottom: 20px;"></el-input>
+                <el-input placeholder="请输入内容" prefix-icon="el-icon-s-goods" v-model="loginruleForm.loginpass" show-password style="margin-bottom: 20px;"></el-input>
             </div>
             <el-form-item style="width:100%;">
                 <el-button size="medium" type="primary" style="width:100%; margin-bottom: 20px" @click="Login">
@@ -19,42 +17,49 @@
 <script>
 import Background from '@/assets/images/background.jpg'
 import Accounticon from '@/assets/icons/svg/user1.svg'
+// import { UserLogin } from '@/api/login'
 export default {
     name: 'Login',
     data() {
         return {
-            input1: '',
-            input2:'',
+            loginruleForm: {
+                loginname: "",
+                loginpass: ""
+            },
+            result:'',
             Background: Background,
-            loading: false,
+            loading: false
         }
-    },
-    created() {
-
-    },
-    mounted() {
-
     },
     methods: {
         Login() {
-            // alert(111);
-            // this.$router.push({ path:'/dashboard.vue'})
-            if ( this.input1 == "admin" && this.input2 == "123456"){
-                this.$message({
-                message: '登录成功！',
-                type: 'success'
-                });
-                this.$router.push({ path: '/Dashboard' })
-            }
-            else if ( this.input1 == "" || this.input2 == "") {
+            if(!this.loginruleForm.loginname || !this.loginruleForm.loginpass){
                 this.$message.error('账号或密码不能为空！');
             }
-            else{
-                this.$message.error('密码错误，请重新输入！');
-                this.input1 = '',
-                this.input2 = ''
+            else {
+                const url = 'http://115.159.126.104/user/login?username='+this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass;
+                // console.log(url);
+                this.$http.post(url)
+                    .then(response => {
+                        console.log(response.body.error)
+                        // if ()
+                        if (!response.body.error) {
+                            this.$message({
+                                message: '登录成功！',
+                                type: 'success'
+                                });
+                                this.$router.push({ path: '/Dashboard' })
+                        }
+                        else {
+                            this.$message.error('账号或密码错误，请重新输入！');
+                        }
+
+                    },
+                    response => {
+                        alert('请求失败');
+                    },
+                );
             }
-            
         }
     }
 }
