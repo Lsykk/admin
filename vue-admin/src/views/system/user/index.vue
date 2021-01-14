@@ -29,7 +29,7 @@
                     class="filter-user"
                     v-model="query.blurry">
                 </el-input>
-                <div>
+                <!-- <div>
                     <el-date-picker
                     v-model="query.createTime"
                     type="datetimerange"
@@ -37,6 +37,18 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
                     :default-time="['12:00:00']">
+                    </el-date-picker>
+                </div> -->
+                <div class="block">
+                    <!-- <span class="demonstration">带快捷选项</span> -->
+                    <el-date-picker
+                    v-model="query.createTime"
+                    class="filter-date"
+                    type="datetimerange"
+                    :picker-options="pickerOptions"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    align="right">
                     </el-date-picker>
                 </div>
                 <el-select
@@ -54,15 +66,15 @@
                     />
                 </el-select>
                 <div style="float: right;margin-right: 600px;margin-top: 20px;">
-                    <el-button type="success" class="user-op-button" icon="el-icon-search">搜索</el-button>
-                    <el-button type="warning" class="user-op-button" icon="el-icon-refresh-left">重置</el-button>
+                    <el-button type="success" class="user-op-button" icon="el-icon-search" style="background-color: #13ce66;border-color: #13ce66   ;">搜索</el-button>
+                    <el-button type="warning" class="user-op-button" icon="el-icon-refresh-left" style="background-color: #ffba00;border-color: #ffba00;">重置</el-button>
                 </div>
             </div>
             <div class="user-op">
                 <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus" @click="adduserClick()">新增</el-button>
-                <el-button id="modify_bt" type="success" v-bind:disabled="modify_bt" class="user-op-button" icon="el-icon-edit">修改</el-button>
-                <el-button id="delete_bt" type="danger" v-bind:disabled="delete_bt" class="user-op-button" icon="el-icon-delete">删除</el-button>
-                <el-button type="warning" class="user-op-button" icon="el-icon-download">导出</el-button>
+                <!-- <el-button id="modify_bt" type="success" v-bind:disabled="modify_bt" class="user-op-button" icon="el-icon-edit"  @click="GetAllCheckBox()">修改</el-button> -->
+                <el-button id="delete_bt" type="danger" v-bind:disabled="delete_bt" class="user-op-button" icon="el-icon-delete" @click="GetAllCheckBox()">删除</el-button>
+                <el-button type="warning" class="user-op-button" icon="el-icon-download" style="background-color: #ffba00;border-color: #ffba00;">导出</el-button>
             </div>
             <div>
                 <el-table
@@ -71,24 +83,36 @@
                     tooltip-effect="dark"
                     class="user-table"
                     @selection-change="handleSelectionChange">
-                    <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column prop="user_name" label="用户名" width="120"></el-table-column>
-                    <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
-                    <el-table-column prop="department" label="部门" width="120"></el-table-column>
+                    <el-table-column id="user_table" type="selection" width="55"></el-table-column>
+                    <el-table-column prop="user_name" label="用户名" width="150"></el-table-column>
+                    <el-table-column prop="nickname" label="昵称" width="150"></el-table-column>
+                    <el-table-column prop="department" label="部门" width="150"></el-table-column>
+                    <el-table-column prop="phone_number" label="手机号码" width="150"></el-table-column>                   
+                    <el-table-column
+                        label="状态" width="150">
+                        <template slot-scope="scope">
+                            <el-switch
+                                v-model="scope.row.status"
+                                :active-value="1"
+                                :inactive-value="2"
+                                active-color="#409EFF"
+                                inactive-color="rgb(245, 108, 108)"
+                                @change="changeSwitch(scope.row)"/>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="create_data" label="创建日期" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="update_data" label="修改日期" width="120"></el-table-column>
-                    <el-table-column prop="status" label="状态" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="phone_number" label="手机号码" width="120"></el-table-column>
-                    <el-table-column
-                        v-if="true"
-                        label="操作"
-                        width="115"
-                        align="center"
-                        fixed="right"
-                    >
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" @click="handleEdit(scope.row)" style="background-color: #1890FF;margin-right: 10px;color:white;" icon="el-icon-edit"></el-button>
+                            <el-popconfirm title="确定删除本条数据吗？">
+                                <el-button type="danger" size="mini" slot="reference" @click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete"></el-button>
+                            </el-popconfirm>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
+            <!-- 新增用户弹框 -->
              <el-dialog title="新增账号" :visible.sync="dialogVisible">
                 <el-form :model="form"  :rules="rules" ref="form" label-width="66px">
                     <el-form-item label="用户名" prop="username" class="dialogform">
@@ -130,8 +154,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    <el-button @click="dialogVisible = false" class="el-button--text el-button--small">取 消</el-button>
+                    <el-button type="primary" @click="dialogVisible = false" class="el-button--small">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -153,7 +177,6 @@ export default {
         };
         return {
             dialogVisible: false,
-            form_dept_value:null,
             modify_bt: true,
             delete_bt: true,
             deptName: '',
@@ -262,7 +285,7 @@ export default {
                 department: '信息部',
                 token: 'njksbfirds',
                 token_exprired_date: '20200112',
-                status: '在线',
+                status: 1,
                 create_data: '20200112',
                 update_data: '20200115',
                 phone_number: '18768263972'
@@ -275,7 +298,7 @@ export default {
                 department: '信息部',
                 token: 'njksbfirds',
                 token_exprired_date: '20200112',
-                status: '在线',
+                status: 2,
                 create_data: '20200112',
                 update_data: '20200115',
                 phone_number: '18768263972'
@@ -288,7 +311,7 @@ export default {
                 department: '人事部',
                 token: 'njksbfirds',
                 token_exprired_date: '20200112',
-                status: '在线',
+                status: 2,
                 create_data: '20200112',
                 update_data: '20200115',
                 phone_number: '18768263972'
@@ -301,7 +324,7 @@ export default {
                 department: '信息部',
                 token: 'njksbfirds',
                 token_exprired_date: '20200112',
-                status: '在线',
+                status: 1,
                 create_data: '20200112',
                 update_data: '20200115',
                 phone_number: '18768263972'
@@ -314,7 +337,7 @@ export default {
                 department: '财务部',
                 token: 'njksbfirds',
                 token_exprired_date: '20200112',
-                status: '在线',
+                status: 1,
                 create_data: '20200112',
                 update_data: '20200115',
                 phone_number: '18768263972'
@@ -334,6 +357,33 @@ export default {
                 phone: null,
             },
             radio: '1',
+            pickerOptions: {
+                shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }]
+            },
         }
     },
     watch: {
@@ -390,18 +440,121 @@ export default {
             //     });
             // }
         },
-      handleSelectionChange(selection) {
+        handleSelectionChange(selection) {
             // this.multipleSelection = selection;
             console.log(selection.length);
-            if (selection.length == 0){
-                this.modify_bt = true ;
-                this.delete_bt = true ;
-            }
-            else {
+            if (selection.length == 1)
                 this.modify_bt = false ;
+            else
+                this.modify_bt = true ;
+            if (selection.length == 0)
+                this.delete_bt = true ;
+            else
                 this.delete_bt = false ;
+        },
+        handleEdit(row) {
+            // console.log(index, row);
+            console.log(row.id)
+            this.dialogVisible = true;
+            // this.form.id = row.id ;
+            // this.form.username = row.username ;
+            // this.form.nickName = row.nickName ;
+            // this.form.gender = row.gender ;
+            // this.form.email = row.email ;
+            // this.form.enabled = row.enabled ;
+            // this.form.roles = row.roles ;
+            // this.form.jobs = row.jobs ;
+            // this.form.dept = row.dept ;
+            // this.form.phone = row.phone ;
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
+        console.log(row.user_name);
+        // alert("您将删除"+row.user_name+"的数据")
+        this.$confirm("此操作将删除" + row.user_name + ", 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //接口
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+      },
+      changeSwitch (row) {
+        console.log(row);
+        console.log(row.status);
+        let statusop;
+        if ( row.status != 1) {
+            statusop = "禁用";
+        }
+        else {
+            statusop = "激活";
+        }
+        
+        this.$confirm("此操作将"+ statusop + row.user_name +", 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+        })
+            .then(() => {
+            //接口
+            this.$message({
+                type: "success",
+                message: "修改成功!"
+            });
+            })
+            .catch(() => {
+            this.$message({
+                type: "info",
+                message: "已取消修改"
+            });
+            });
+        //   this.tableData.
+    //   const data = {
+    //     id: row.id,
+    //     status: row.status,
+    //   };
+    //   this.$api.accountSwitch(data).then(res => {
+    //     if (res.code === '200' || res.code === 200) {
+    //       // 调用表格数据
+    //       this.getTableData();
+    //     } else {
+    //       this.$message.error(res.msg);
+    //       // 调用表格数据
+    //       this.getTableData();
+    //     }
+    //     this.loading = false;
+    //   }).catch({
+        
+    //   });
+    },
+    GetAllCheckBox() {
+        var div = document.getElementById("user_table");
+        var inputs = div.getElementsByTagName("input");
+        //定义复选框数组，用来返回
+        var checkboxs = new Array();
+        var nIndex = 0;
+        for (var i = 0; i < inputs.length; i++) {
+            //通过type是否为checkbox来判断复选框
+            if (inputs[i].type == "checkbox") {
+            checkboxs[nIndex] = inputs[i];
+            nIndex++;
             }
         }
+        console.log(checkboxs);
+
+    }
+ 
     }
 }
 </script>
@@ -517,5 +670,13 @@ export default {
 <style>
 .el-dialog {
     width: 30%;
+}
+.el-radio__label {
+    font-size: 14px;
+    padding-right: 20px;
+    padding-left: 10px;
+}
+.el-form-item__content {
+    /* margin-left: 100px!important; */
 }
 </style>
