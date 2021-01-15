@@ -127,7 +127,13 @@ export default {
                                 message: '登录成功！',
                                 type: 'success'
                                 });
-                                this.$router.push({ path: '/Dashboard' })
+                                // this.$router.push({ path: '/Dashboard' })
+                                this.$router.push({
+                                path: "/Dashboard",
+                                query: {
+                                    user_name: this.loginruleForm.loginname
+                                }
+                                });
                         }
                         else {
                             this.$message.error('账号或密码错误，请重新输入！');

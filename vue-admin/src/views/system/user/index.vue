@@ -400,8 +400,8 @@ export default {
             .catch(_ => {});
         },
         filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
+            if (!value) return true;
+            return data.label.indexOf(value) !== -1;
         },
         adduserClick() {
             // alert('add');
@@ -410,21 +410,7 @@ export default {
         // 获取左侧部门数据
         getDeptDatas(node, resolve) {
         },
-        // //监听row-click事件，实现选中
-        // rowClick(val) {
-        //     console.log(val);
-        //     this.modify_bt = false ;
-        //     this.delete_bt = false ;
-        //     //  let refsElTable = this.$refs.serveTable; // 获取表格对象
-        //     //  let findRow = this.multipleSelection.find(c => c.rowIndex == row.rowIndex);  //找到选中的行
-        //     //  if (findRow ) {
-        //     //      refsElTable.toggleRowSelection(row, false);  //如过重复选中，则取消选中
-        //     //      return;
-        //     //  }
-        //     //  refsElTable.toggleRowSelection(row,true); // 实现选中行中选中事件
-        //  },
-        //表格选中事件
-            // 获取弹窗内部门数据
+        // 获取弹窗内部门数据
         loadDepts() {
             // if (action === LOAD_CHILDREN_OPTIONS) {
             //     getDepts({ enabled: true, pid: parentNode.id }).then((res) => {
@@ -494,67 +480,44 @@ export default {
         console.log(row);
         console.log(row.status);
         let statusop;
-        if ( row.status != 1) {
+        if ( row.status != 1) 
             statusop = "禁用";
-        }
-        else {
+        else
             statusop = "激活";
-        }
-        
         this.$confirm("此操作将"+ statusop + row.user_name +", 是否继续?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
-        })
-            .then(() => {
-            //接口
-            this.$message({
-                type: "success",
-                message: "修改成功!"
-            });
             })
-            .catch(() => {
-            this.$message({
-                type: "info",
-                message: "已取消修改"
+            .then(() => {
+                //接口
+                this.$message({
+                    type: "success",
+                    message: "修改成功!"
+                });
+                })
+                .catch(() => {
+                this.$message({
+                    type: "info",
+                    message: "已取消修改"
+                });
             });
-            });
-        //   this.tableData.
-    //   const data = {
-    //     id: row.id,
-    //     status: row.status,
-    //   };
-    //   this.$api.accountSwitch(data).then(res => {
-    //     if (res.code === '200' || res.code === 200) {
-    //       // 调用表格数据
-    //       this.getTableData();
-    //     } else {
-    //       this.$message.error(res.msg);
-    //       // 调用表格数据
-    //       this.getTableData();
-    //     }
-    //     this.loading = false;
-    //   }).catch({
-        
-    //   });
-    },
-    GetAllCheckBox() {
-        var div = document.getElementById("user_table");
-        var inputs = div.getElementsByTagName("input");
-        //定义复选框数组，用来返回
-        var checkboxs = new Array();
-        var nIndex = 0;
-        for (var i = 0; i < inputs.length; i++) {
-            //通过type是否为checkbox来判断复选框
-            if (inputs[i].type == "checkbox") {
-            checkboxs[nIndex] = inputs[i];
-            nIndex++;
+        },
+        GetAllCheckBox() {
+            var div = document.getElementById("user_table");
+            var inputs = div.getElementsByTagName("input");
+            //定义复选框数组，用来返回
+            var checkboxs = new Array();
+            var nIndex = 0;
+            for (var i = 0; i < inputs.length; i++) {
+                //通过type是否为checkbox来判断复选框
+                if (inputs[i].type == "checkbox") {
+                checkboxs[nIndex] = inputs[i];
+                nIndex++;
+                }
             }
+            console.log(checkboxs);
         }
-        console.log(checkboxs);
-
-    }
- 
     }
 }
 </script>

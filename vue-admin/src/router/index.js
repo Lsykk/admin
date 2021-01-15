@@ -27,6 +27,18 @@ const routes = [
     ]
   },
   {
+    path: "/",
+    name: "",
+    component: Layout,
+    children: [
+      {
+        path: "/user/center",
+        name: "个人中心",//首页
+        component: () => import("../views/system/user/center.vue")
+      },
+    ]
+  },
+  {
     path: "/system",
     name: "系统管理",
     component: Layout,

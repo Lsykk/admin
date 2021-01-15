@@ -101,14 +101,31 @@
         </div>
         <div class="right">
             <div class="fixed-header">
-                <div class="catalog-icon">
+                <!-- <div class="catalog-icon">
                     <i class="el-icon-s-fold "></i>
-                </div>
+                </div> -->
                 <div class="breadcrumb">
                     <el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
                         <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to="item.path">{{item.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
+                </div>
+                <div class="userinfo">
+                    <div class="userinfo_op">
+                        <!-- <i class="el-icon-setting"></i> -->
+                    </div>
+                    <div class="userinfo_icon">
+                        <el-dropdown @command="handleCommand">
+                        <span class="el-dropdown-link">
+                            {{user_name}},您好！<i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="a">布局设置</el-dropdown-item>
+                            <el-dropdown-item command="b">个人中心</el-dropdown-item>
+                            <el-dropdown-item command="c" divided>退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
                 </div>
             </div>
             <div>
@@ -134,6 +151,7 @@
                 //当前激活菜单的 index
                 // active: "/problem"
             },
+            user_name:"18758298526"
         }
     },
     watch: {
@@ -143,6 +161,10 @@
     },
     created() {
         this.getBreadcrumb()
+    },
+    beforeMount() {
+        // alert(this.$route.query.user_name); // 在登录页里面直接接收
+        this.user_name = this.$route.query.user_name ;
     },
     methods: {
       getBreadcrumb() {
@@ -158,6 +180,34 @@
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
+      },
+      handleCommand(command) {
+        if (command == 'a') {
+            this.$message('布局设置');
+        }
+        else if (command == 'b') {
+            // this.$message('个人中心');
+             this.$router.push({ path: '/user/center' })
+        }
+        else {
+            // this.$message('退出登录');
+            this.$confirm('确定注销并退出系统吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '退出成功!'
+                });
+                 this.$router.push({ path: '/login' })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消退出'
+                });          
+            });
+        }
       }
     }
   }
@@ -232,12 +282,52 @@ a {
     /* background-color: red; */
     padding-top: 22px;
     padding-left: 60px;
+    display: block;
+    float: left;
 }
+.userinfo {
+    width: 200px;
+    height: 50px;
+    /* background-color: crimson; */
+    float: right;
+    margin: 10px;
+}
+.userinfo_op {
+    width: 30%;
+    height: 50px;
+    /* background-color: darkblue; */
+    float: left;
+}
+.userinfo_op i {
+    font-size: 30px;
+    display: block;
+    margin: 10px;
+}
+.userinfo_icon {
+    width: 65%;
+    height: 50px;
+    /* background-color: darkblue; */
+    float: right;
+}
+.userinfo_icon span {
+    font-size: small;
+    display: block;
+    margin-top: 15px;
+}
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 
 </style>
 <style>
 .el-menu-item-group__title {
     padding: 0px !important;
 }
-
+.el-breadcrumb span {
+    font-weight: 400 !important;
+}
 </style>
