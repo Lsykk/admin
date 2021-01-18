@@ -187,6 +187,7 @@
         }
         else if (command == 'b') {
             // this.$message('个人中心');
+            // console.log(this.GLOBAL.token)
              this.$router.push({ path: '/user/center' })
         }
         else {
@@ -196,11 +197,28 @@
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '退出成功!'
-                });
-                 this.$router.push({ path: '/login' })
+                 const url = this.APIurl.API.api.UserLogout ;
+                // console.log(url);
+                this.$http.get(url)
+                    .then(response => {
+                        console.log(response.body.error)
+                        // if ()
+                        if (!response.body.error) {
+                            this.$message({
+                                type: 'success',
+                                message: '退出成功!'
+                            });
+                            this.$router.push({ path: '/login' })
+                        }
+                        else {
+                            this.$message.error('出现错误！');
+                        }
+                    },
+                    response => {
+                        alert('请求失败');
+                    },
+                );
+
             }).catch(() => {
                 this.$message({
                     type: 'info',

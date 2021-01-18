@@ -9,9 +9,9 @@
                 <ul class="user-info">
                     <li><div style="height: 100%">登录账号<div class="user-right">{{ user.username }}</div></div></li>
                     <li> 用户昵称 <div class="user-right">{{ user.nickName }}</div></li>
-                    <li> 所属部门 <div class="user-right"> {{ user.dept }}</div></li>
-                    <li> 手机号码 <div class="user-right">{{ user.phone }}</div></li>
-                    <li> 用户邮箱 <div class="user-right">{{ user.email }}</div></li>
+                    <li> 角色 <div class="user-right"> {{ user.role }}</div></li>
+                    <li> 手机号码 <div class="user-right">{{ user.phone_number }}</div></li>
+                    <!-- <li> 用户邮箱 <div class="user-right">{{ user.email }}</div></li> -->
                     <!-- <li> 安全设置
                         <div class="user-right">
                         <a @click="$refs.pass.dialog = true">修改密码</a>
@@ -80,11 +80,10 @@ export default {
             dialogVisible: false,
             user: {
                 id: 111,
-                username: "this.user.username",
-                nickName: "this.user.nickName",
-                dept: "this.user.dept.name",
-                phone: "this.user.phone",
-                email: "this.user.email"
+                username: "",
+                nickName: "",
+                role: "",
+                phone_number: ""
             },
             newpassruleForm: {
                 oldpass: null,
@@ -106,6 +105,25 @@ export default {
                 ]
             },
         }
+    },
+    created() {
+         const url = this.APIurl.API.api.Getinfo;
+         const token = this.GLOBAL.token;
+        this.$http({
+            type: "GET",
+            url ,
+            headers: {'token': token}
+        }).then(response => {
+            console.log(response.body.data)
+            const data = response.body.data;
+            this.user.username = data.user_name;
+            this.user.nickName = data.nickname;
+            this.user.phone_number = data.phone_number;
+            this.user.role = data.role;
+        },
+        response => {
+            alert('请求失败');
+        });
     },
     methods: {
         open() {

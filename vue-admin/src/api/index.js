@@ -6,6 +6,8 @@ let API={
         SendSmCode: apiUrl + '/user/send_sms_code?phone_number=',//发送验证码
         SignUp: apiUrl + '/user/signup?phone_number=',//用户注册
         ChangePassword: apiUrl + '/user/update_password?old_password=',//忘记密码
+        UserLogout: apiUrl + '/user/logout',//用户登出
+        Getinfo:  apiUrl + '/user/info',//用户登出
 		},
 }
 

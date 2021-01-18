@@ -47,6 +47,7 @@ import { isvalidPhone } from "@/utils/validate";
 import Background from '@/assets/images/background.jpg'
 import Accounticon from '@/assets/icons/svg/user1.svg'
 import api from '@/api/index.js'
+import global_ from '../components/Global'
 // import { UserLogin } from '@/api/login'
 export default {
     name: 'Login',
@@ -116,12 +117,17 @@ export default {
                 this.$message.error('账号或密码不能为空！');
             }
             else {
-                const url = this.APIurl.API.api.UserLogin + this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass;
-                // console.log(url);
-                this.$http.post(url)
-                    .then(response => {
-                        console.log(response.body.error)
-                        // if ()
+                this.$http({
+                    type: "GET",
+                    url: this.APIurl.API.api.UserLogin + this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass
+                    // headers: {'Authorization': token}
+                }).then(response => {
+                        // console.log(response.body.error)
+                        console.log(response.body)
+                        console.log(this.GLOBAL.token)
+                        console.log(response.body.data.user.token)
+                        this.GLOBAL.token = response.body.data.user.token ;
+                        console.log(this.GLOBAL.token)
                         if (!response.body.error) {
                             this.$message({
                                 message: '登录成功！',
@@ -141,10 +147,44 @@ export default {
                     },
                     response => {
                         alert('请求失败');
-                    },
+                    }
                 );
             }
         },
+                // const url = this.APIurl.API.api.UserLogin + this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass;
+                // // console.log(url);
+                // this.$http.post(url)
+                    // .then(response => {
+                    //     // console.log(response.body.error)
+                    //     // console.log(response.body)
+                    //     console.log(this.GLOBAL.token)
+                    //     // console.log(response.body.data.user.token)
+                    //     this.GLOBAL.token = response.body.data.user.token ;
+                    //     console.log(this.GLOBAL.token)
+                    //     // if ()
+                    //     if (!response.body.error) {
+                    //         this.$message({
+                    //             message: '登录成功！',
+                    //             type: 'success'
+                    //             });
+                    //             // this.$router.push({ path: '/Dashboard' })
+                    //             this.$router.push({
+                    //             path: "/Dashboard",
+                    //             query: {
+                    //                 user_name: this.loginruleForm.loginname
+                    //             }
+                    //             });
+                    //     }
+                    //     else {
+                    //         this.$message.error('账号或密码错误，请重新输入！');
+                    //     }
+                    // },
+        //             response => {
+        //                 alert('请求失败');
+        //             },
+        //         );
+        //     }
+        // },
         registeruserClick() {
             // alert('add');
             this.dialogVisible = true;
