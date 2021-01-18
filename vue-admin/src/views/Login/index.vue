@@ -71,10 +71,9 @@
 <script>
 import { isvalidPhone } from "@/utils/validate";
 import Background from '@/assets/images/background.jpg'
-import Accounticon from '@/assets/icons/svg/user1.svg'
 import api from '@/api/index.js'
 import global_ from '../components/Global'
-// import { UserLogin } from '@/api/login'
+
 export default {
     name: 'Login',
     data() {
@@ -155,12 +154,7 @@ export default {
                     type: "GET",
                     url: this.APIurl.API.api.UserLogin + this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass
                 }).then(response => {
-                        // console.log(response.body.error)
-                        // console.log(response.body)
-                        // console.log(this.GLOBAL.token)
-                        // console.log(response.body.data.user.token)
                         this.GLOBAL.token = response.body.data.user.token ;
-                        // console.log(this.GLOBAL.token)
                         if (!response.body.error) {
                             this.$message({
                                 message: '登录成功！',
@@ -184,42 +178,7 @@ export default {
                 );
             }
         },
-                // const url = this.APIurl.API.api.UserLogin + this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass;
-                // // console.log(url);
-                // this.$http.post(url)
-                    // .then(response => {
-                    //     // console.log(response.body.error)
-                    //     // console.log(response.body)
-                    //     console.log(this.GLOBAL.token)
-                    //     // console.log(response.body.data.user.token)
-                    //     this.GLOBAL.token = response.body.data.user.token ;
-                    //     console.log(this.GLOBAL.token)
-                    //     // if ()
-                    //     if (!response.body.error) {
-                    //         this.$message({
-                    //             message: '登录成功！',
-                    //             type: 'success'
-                    //             });
-                    //             // this.$router.push({ path: '/Dashboard' })
-                    //             this.$router.push({
-                    //             path: "/Dashboard",
-                    //             query: {
-                    //                 user_name: this.loginruleForm.loginname
-                    //             }
-                    //             });
-                    //     }
-                    //     else {
-                    //         this.$message.error('账号或密码错误，请重新输入！');
-                    //     }
-                    // },
-        //             response => {
-        //                 alert('请求失败');
-        //             },
-        //         );
-        //     }
-        // },
         registeruserClick() {
-            // alert('add');
             this.dialogVisible1 = true;
         },
         forgiveClick() {
@@ -232,18 +191,13 @@ export default {
                 this.$http.post(url)
                     .then(response => {
                         // console.log(response.body)
-                        // console.log(response.body.data.code)
                         this.form.sms_code_test = response.body.data.code ;
-                        // this.fpwform.sms_code_test = response.body.data.code ;
                         alert (this.form.sms_code_test);
-                        // if ()
                         if (!response.body.error) {
                             this.$message({
-                                message: '获取验证码成功！',
+                                message: '发送验证码成功！',
                                 type: 'success'
                                 });
-                                // this.$router.push({ path: '/Dashboard' })
-                            // alert("验证码随机数是："+response.body.data.code)
                         }
                         else {
                             this.$message.error('发送验证码失败！');
@@ -255,24 +209,18 @@ export default {
                 );
         },
         SendSmCode2() {
-        // console.log('submit!');
             const url = this.APIurl.API.api.SendSmCode + this.fpwform.phone_number;
-                // console.log(url);
                 this.$http.post(url)
                     .then(response => {
                         // console.log(response.body)
-                        // console.log(response.body.data.code)
-                        // this.form.sms_code_test = response.body.data.code ;
                         this.fpwform.sms_code_test = response.body.data.code ;
                         alert (this.fpwform.sms_code_test);
                         // if ()
                         if (!response.body.error) {
                             this.$message({
-                                message: '获取验证码成功！',
+                                message: '发送验证码成功！',
                                 type: 'success'
                                 });
-                                // this.$router.push({ path: '/Dashboard' })
-                            // alert("验证码随机数是："+response.body.data.code)
                         }
                         else {
                             this.$message.error('发送验证码失败！');
@@ -288,19 +236,13 @@ export default {
                         + '&password=' + this.form.password
                         + '&nickname=' + this.form.nickname
                         + '&sms_code=' + this.form.sms_code_test;
-                // console.log(url);
                 this.$http.post(url)
                     .then(response => {
-                        // console.log(response.body)
-                        // if ()
                         if (!response.body.error) {
                             this.$message({
                                 message: '注册成功！',
                                 type: 'success'
                                 });
-                                // this.$router.push({ path: '/login' })
-                                // history.go(-1);
-                                // window.location="${path}";
                                 location.reload();
                         }
                         else {
