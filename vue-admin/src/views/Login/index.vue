@@ -10,11 +10,12 @@
                 <el-button size="medium" type="primary" style="width:100%; margin-bottom: 20px" @click="Login">
                     <span>登 录</span>
                 </el-button>
+                <el-button type="text" class="forgivepass" @click="forgiveClick()">忘记密码?</el-button>
                 <el-button type="text" class="register" @click="registeruserClick()">点我注册</el-button>
             </el-form-item>
         </el-form>
         <!-- 用户注册弹框 -->
-             <el-dialog title="注册账号" :visible.sync="dialogVisible">
+             <el-dialog title="注册账号" :visible.sync="dialogVisible1">
                 <el-form :model="form"  :rules="rules" ref="form" label-width="66px">
                     <el-form-item label="手机" prop="phone_number" class="dialogform">
                         <el-input v-model.number="form.phone_number" />
@@ -30,14 +31,39 @@
                             <el-input v-model="form.sms_code" placeholder="请输入验证码"></el-input>
                         </el-form-item>
                         <el-form-item class="code_right">
-                            <el-button type="primary" size="small" @click="SendSmCode">获取验证码</el-button>
+                            <el-button type="primary" size="small" @click="SendSmCode1">获取验证码</el-button>
                         </el-form-item>
                     </div>
 
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false" class="el-button--text el-button--small">取 消</el-button>
+                    <el-button @click="dialogVisible1 = false" class="el-button--text el-button--small">取 消</el-button>
                     <el-button type="primary" @click="SignUp()" class="el-button--small">确 定</el-button>
+                </div>
+            </el-dialog>
+
+        <!-- 忘记密码 -->
+             <el-dialog title="忘记密码" :visible.sync="dialogVisible2">
+                <el-form :model="fpwform"  :rules="rules" ref="fpwform" label-width="66px">
+                    <el-form-item label="手机" prop="phone_number" class="dialogform">
+                        <el-input v-model.number="fpwform.phone_number" />
+                    </el-form-item>
+                    <el-form-item label="新密码" prop="password" class="dialogform">
+                        <el-input v-model.number="fpwform.password" />
+                    </el-form-item>
+                    <div>
+                        <el-form-item label="手机验证码" class="dialogform ver_code code_left">
+                            <el-input v-model="fpwform.sms_code" placeholder="请输入验证码"></el-input>
+                        </el-form-item>
+                        <el-form-item class="code_right">
+                            <el-button type="primary" size="small" @click="SendSmCode2">获取验证码</el-button>
+                        </el-form-item>
+                    </div>
+
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible2 = false" class="el-button--text el-button--small">取 消</el-button>
+                    <el-button type="primary" @click="ForgivePassword()" class="el-button--small">确 定</el-button>
                 </div>
             </el-dialog>
     </div>
@@ -70,35 +96,36 @@ export default {
             result:'',
             Background: Background,
             loading: false,
-            dialogVisible: false,
+            dialogVisible1: false,
+            dialogVisible2: false,
             rules: {
                 nickname: [
                 { required: true, message: "请输入用户昵称", trigger: "blur" },
-                {
-                    min: 2,
-                    max: 20,
-                    message: "长度在 2 到 20 个字符",
-                    trigger: "blur",
-                },
+                // {
+                //     min: 2,
+                //     max: 20,
+                //     message: "长度在 2 到 20 个字符",
+                //     trigger: "blur",
+                // },
                 ],
                  password: [
                 { required: true, message: "请输入用户昵称", trigger: "blur" },
-                {
-                    min: 2,
-                    max: 20,
-                    message: "长度在 2 到 20 个字符",
-                    trigger: "blur",
-                },
+                // {
+                //     min: 2,
+                //     max: 20,
+                //     message: "长度在 2 到 20 个字符",
+                //     trigger: "blur",
+                // },
                 ],
                 phone_number: [{ required: true, trigger: "blur", validator: validPhone }],
                 sms_code: [
                 { required: true, message: "请输入验证码", trigger: "blur" },
-                {
-                    min: 2,
-                    max: 20,
-                    message: "长度在 2 到 20 个字符",
-                    trigger: "blur",
-                },
+                // {
+                //     min: 2,
+                //     max: 20,
+                //     message: "长度在 2 到 20 个字符",
+                //     trigger: "blur",
+                // },
                 ],
             },
             form : {
@@ -106,6 +133,13 @@ export default {
                 phone_number: null,
                 password: null,
                 nickname: null,
+                sms_code: null,
+                sms_code_test: null//联调用的验证码参数
+            },
+            fpwform : {
+                id: null,
+                phone_number: null,
+                password: null,
                 sms_code: null,
                 sms_code_test: null//联调用的验证码参数
             }
@@ -120,14 +154,13 @@ export default {
                 this.$http({
                     type: "GET",
                     url: this.APIurl.API.api.UserLogin + this.loginruleForm.loginname+'&password='+this.loginruleForm.loginpass
-                    // headers: {'Authorization': token}
                 }).then(response => {
                         // console.log(response.body.error)
-                        console.log(response.body)
-                        console.log(this.GLOBAL.token)
-                        console.log(response.body.data.user.token)
+                        // console.log(response.body)
+                        // console.log(this.GLOBAL.token)
+                        // console.log(response.body.data.user.token)
                         this.GLOBAL.token = response.body.data.user.token ;
-                        console.log(this.GLOBAL.token)
+                        // console.log(this.GLOBAL.token)
                         if (!response.body.error) {
                             this.$message({
                                 message: '登录成功！',
@@ -187,18 +220,51 @@ export default {
         // },
         registeruserClick() {
             // alert('add');
-            this.dialogVisible = true;
+            this.dialogVisible1 = true;
         },
-        SendSmCode() {
+        forgiveClick() {
+            this.dialogVisible2 = true;
+        },
+        SendSmCode1() {
         // console.log('submit!');
             const url = this.APIurl.API.api.SendSmCode + this.form.phone_number;
                 // console.log(url);
                 this.$http.post(url)
                     .then(response => {
-                        console.log(response.body)
-                        console.log(response.body.data.code)
+                        // console.log(response.body)
+                        // console.log(response.body.data.code)
                         this.form.sms_code_test = response.body.data.code ;
+                        // this.fpwform.sms_code_test = response.body.data.code ;
                         alert (this.form.sms_code_test);
+                        // if ()
+                        if (!response.body.error) {
+                            this.$message({
+                                message: '获取验证码成功！',
+                                type: 'success'
+                                });
+                                // this.$router.push({ path: '/Dashboard' })
+                            // alert("验证码随机数是："+response.body.data.code)
+                        }
+                        else {
+                            this.$message.error('发送验证码失败！');
+                        }
+                    },
+                    response => {
+                        alert('请求失败');
+                    },
+                );
+        },
+        SendSmCode2() {
+        // console.log('submit!');
+            const url = this.APIurl.API.api.SendSmCode + this.fpwform.phone_number;
+                // console.log(url);
+                this.$http.post(url)
+                    .then(response => {
+                        // console.log(response.body)
+                        // console.log(response.body.data.code)
+                        // this.form.sms_code_test = response.body.data.code ;
+                        this.fpwform.sms_code_test = response.body.data.code ;
+                        alert (this.fpwform.sms_code_test);
                         // if ()
                         if (!response.body.error) {
                             this.$message({
@@ -225,7 +291,7 @@ export default {
                 // console.log(url);
                 this.$http.post(url)
                     .then(response => {
-                        console.log(response.body)
+                        // console.log(response.body)
                         // if ()
                         if (!response.body.error) {
                             this.$message({
@@ -245,6 +311,30 @@ export default {
                         alert('请求失败');
                     },
                 );
+        },
+        ForgivePassword() {
+            const url = this.APIurl.API.api.Forgivepw + this.fpwform.phone_number 
+                        + '&password=' + this.fpwform.password
+                        + '&sms_code=' + this.fpwform.sms_code_test; 
+            this.$http({
+                type: "POST",
+                url
+            }).then(response => {
+                // console.log(response.body)
+                if (!response.body.error) {
+                    this.$message({
+                        message: '重置密码成功！',
+                        type: 'success'
+                    });
+                    this.dialogVisible2 = false;
+                }
+                else {
+                    this.$message.error('错误！');
+                }
+            },
+            response => {
+                alert('请求失败');
+            });        
         }
     }
 }
@@ -284,6 +374,11 @@ export default {
 .register {
     display: block;
     float: right;
+}
+.forgivepass {
+    display: block;
+    float: left; 
+    color: #c0c4cc;
 }
 .dialogform{
     margin-bottom: 18px;

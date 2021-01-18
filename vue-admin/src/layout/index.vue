@@ -188,7 +188,7 @@
         else if (command == 'b') {
             // this.$message('个人中心');
             // console.log(this.GLOBAL.token)
-             this.$router.push({ path: '/user/center' })
+            this.$router.push({ path: '/user/center' })
         }
         else {
             // this.$message('退出登录');
@@ -201,7 +201,7 @@
                 // console.log(url);
                 this.$http.get(url)
                     .then(response => {
-                        console.log(response.body.error)
+                        // console.log(response.body.error)
                         // if ()
                         if (!response.body.error) {
                             this.$message({

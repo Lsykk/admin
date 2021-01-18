@@ -92,17 +92,14 @@ export default {
             },
             newpassrules: {
                 oldpass: [
-                    { required: true, message: "请输入您的旧密码", trigger: "blur" },
-                    // { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+                    { required: true, message: "请输入您的旧密码", trigger: "blur" }
                 ],
                 newpass: [
-                    { required: true, message: "请输入您的新密码", trigger: "blur" },
-                    // { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+                    { required: true, message: "请输入您的新密码", trigger: "blur" }
                 ],
-                checknewPass: [
-                    { required: true, message: "请再次输入您的新密码", trigger: "blur" },
-                    // { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
-                ]
+                // checknewPass: [
+                //     { required: true, message: "请再次输入您的新密码", trigger: "blur" }
+                // ]
             },
         }
     },
@@ -114,7 +111,7 @@ export default {
             url ,
             headers: {'token': token}
         }).then(response => {
-            console.log(response.body.data)
+            // console.log(response.body.data)
             const data = response.body.data;
             this.user.username = data.user_name;
             this.user.nickName = data.nickname;
@@ -137,25 +134,27 @@ export default {
             else {
                 const url = this.APIurl.API.api.ChangePassword + this.newpassruleForm.oldpass 
                                 + '&password=' + this.newpassruleForm.newpass
-                // console.log(url);
-                this.$http.post(url)
-                    .then(response => {
-                        console.log(response)
-                        if (!response.body.error) {
-                            this.$message({
-                                message: '更改密码成功！',
-                                type: 'success'
-                                });
-                        }
-                        else {
-                            this.$message.error('旧密码错误!!');
-                            return false;
-                        }
-                    },
-                    response => {
-                        alert('请求失败');
-                    },
-                );
+                const token = this.GLOBAL.token;
+                this.$http({
+                    type: "POST",
+                    url,
+                    headers: {'token': token}
+                }).then(response => {
+                    // console.log(response.body)
+                    if (!response.body.error) {
+                        this.$message({
+                            message: '修改密码成功！',
+                            type: 'success'
+                        });
+                        this.dialogVisible = false;
+                    }
+                    else {
+                        this.$message.error('密码修改失败，请重试！');
+                    }
+                },
+                response => {
+                    alert('请求失败');
+                });
             }
      
         }
