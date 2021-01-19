@@ -35,3 +35,52 @@
       width: 230px !important;
     }
   }
+
+  .filter-user {
+    font-size: small;
+    height: 33px;
+    width: 200px;
+    margin: 0 3px 10px 0;
+    width: 200px; 
+    display: block; 
+    float: left;
+    margin: 8px 5px;
+    input {
+      height: 30.5px;
+      line-height: 30.5px;
+    }
+}
+
+.filter-date {
+  font-size: small;
+  display: block;
+  height: 33px;
+  width: 250px !important;
+  float: left;
+  margin: 8px 5px;
+  input {
+    height: 30.5px;
+    line-height: 30.5px;
+  }
+}
+
+.user-op-button {
+  padding: 7px 15px;
+  font-size: 12px;
+  border-radius: 3px;
+  margin: 8px 5px;
+}
+
+.filter-status {
+  font-size: small;
+  display: inline-block;
+  height: 33px;
+  width: 80px;
+  margin: 8px 5px;
+  vertical-align: middle;
+  float: left;
+  input {
+    height: 30.5px;
+    line-height: 30.5px;
+  }
+}

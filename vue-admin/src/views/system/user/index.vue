@@ -29,18 +29,7 @@
                     class="filter-user"
                     v-model="query.blurry">
                 </el-input>
-                <!-- <div>
-                    <el-date-picker
-                    v-model="query.createTime"
-                    type="datetimerange"
-                    class="filter-date"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    :default-time="['12:00:00']">
-                    </el-date-picker>
-                </div> -->
                 <div class="block">
-                    <!-- <span class="demonstration">带快捷选项</span> -->
                     <el-date-picker
                     v-model="query.createTime"
                     class="filter-date"
@@ -65,13 +54,13 @@
                         :value="item.key"
                     />
                 </el-select>
-                <div style="float: right;margin-right: 600px;margin-top: 20px;">
+                <div style="margin: 8px 5px;">
                     <el-button type="success" class="user-op-button" icon="el-icon-search" style="background-color: #13ce66;border-color: #13ce66   ;">搜索</el-button>
                     <el-button type="warning" class="user-op-button" icon="el-icon-refresh-left" style="background-color: #ffba00;border-color: #ffba00;">重置</el-button>
                 </div>
             </div>
             <div class="user-op">
-                <el-button type="primary" style="margin-left: -400px;" class="user-op-button" icon="el-icon-plus" @click="adduserClick()">新增</el-button>
+                <el-button type="primary" class="user-op-button" icon="el-icon-plus" @click="adduserClick()">新增</el-button>
                 <!-- <el-button id="modify_bt" type="success" v-bind:disabled="modify_bt" class="user-op-button" icon="el-icon-edit"  @click="GetAllCheckBox()">修改</el-button> -->
                 <el-button id="delete_bt" type="danger" v-bind:disabled="delete_bt" class="user-op-button" icon="el-icon-delete" @click="GetAllCheckBox()">删除</el-button>
                 <el-button type="warning" class="user-op-button" icon="el-icon-download" style="background-color: #ffba00;border-color: #ffba00;">导出</el-button>
@@ -537,7 +526,7 @@ export default {
 }
 .head-container {
     height: 50px;
-    padding-bottom: 20px;
+    // padding-bottom: 20px;
     // background-color: #666;
 }
 .filter-text {
@@ -552,46 +541,7 @@ export default {
       line-height: 30.5px;
     }
 }
-.filter-user {
-    font-size: small;
-    height: 33px;
-    width: 200px;
-    margin: 0 3px 10px 0;
-    width: 200px; 
-    display: block; 
-    float: left;
-    margin: 20px 5px;
-    input {
-      height: 30.5px;
-      line-height: 30.5px;
-    }
-}
 
-.filter-date {
-    font-size: small;
-    display: block;
-    height: 33px;
-    width: 200px;
-    float: left;
-    margin: 20px 5px;
-    input {
-      height: 30.5px;
-      line-height: 30.5px;
-    }
-}
-
-.filter-status {
-    font-size: small;
-    display: inline-block;
-    height: 33px;
-    width: 80px;
-    margin: 20px 5px;
-    vertical-align: middle;
-    input {
-      height: 30.5px;
-      line-height: 30.5px;
-    }
-}
 .el-select-dropdown__item{
     font-size: 14px ;
     line-height: 34px ;
@@ -617,11 +567,7 @@ export default {
     height: 50px;
     // background-color: red;
 }
-.user-op-button {
-    padding: 7px 15px;
-    font-size: 12px;
-    border-radius: 3px;
-}
+
 .dialogform{
     margin-bottom: 18px;
     display: inline-block;

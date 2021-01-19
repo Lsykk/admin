@@ -311,7 +311,7 @@ export default {
     height: 20px;
     float: left;
     // background-color: red;
-    background-image: url("../../assets/icons/svg/user.svg");
+    // background-image: url("../../assets/icons/svg/user.svg");
 }
 .register {
     display: block;
